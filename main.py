@@ -84,3 +84,14 @@ async def get_reviews():
         review = user_review.review,
         score = user_review.score
     ) for user_review in reviews]
+
+
+@app.get('/reviews/{review_id}', response_model = ReviewResponseModel)
+async def get_review(review_id: int):
+
+    user_review = UserReview.select().where(UserReview.id == review_id).first()
+
+    if user_review is None:
+        raise HTTPException(status_code = 404, detail = 'Review Not found')
+
+    return ReviewResponseModel(id = user_review.id, movie_id = user_review.movie_id, review = user_review.review, score = user_review.score)
