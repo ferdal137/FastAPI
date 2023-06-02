@@ -1,5 +1,19 @@
+from typing import Any
+
 from pydantic import BaseModel
 from pydantic import validator
+
+from peewee import ModelSelect
+
+
+"""class PeeweGetterDict(dict):
+    def get(self, key:Any, default: Any = None):     #Convert our model object to a dict
+        
+        res = getattr(self.obj, key, default)
+        if isinstance(res, ModelSelect):
+            return list(res)
+
+        return res"""
 
 class UserRequestModel(BaseModel):
     username: str
@@ -16,3 +30,26 @@ class UserRequestModel(BaseModel):
 class UserResponseModel(BaseModel):
     id : int 
     username : str
+
+    """class Config:
+         orm_mode = True
+         getter_dict = PeeweGetterDict"""
+
+class ReviewRequestModel(BaseModel):
+    user_id: int
+    movie_id: int
+    review: str
+    score: int
+
+    @validator('score')
+    def score_validator(cls, score):
+        if score < 0 or score > 5:
+            raise ValueError('The score range is from 0 to 5')
+
+        return score
+
+class ReviewResponseModel(BaseModel):
+    id: int
+    movie_id: int
+    review: str
+    score: int

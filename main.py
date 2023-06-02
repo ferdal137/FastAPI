@@ -10,6 +10,9 @@ from database import database as connection
 from schemas import UserRequestModel
 from schemas import UserResponseModel
 
+from schemas import ReviewRequestModel
+from schemas import ReviewResponseModel
+
 #Start the server: uvicorn main:app
 
 app = FastAPI(title = 'Project Movie Review',
@@ -29,7 +32,6 @@ def shutdown():
         connection.close()
 
 
-
 @app.get('/')
 async def index():
     return 'Hello world from fastAPI server'
@@ -47,4 +49,24 @@ async def create_user(user: UserRequestModel):
          password = hash_password 
     )
 
+    #return user
     return UserResponseModel(id = user.id, username = user.username)
+
+
+@app.post('/reviews', response_model=ReviewResponseModel)
+async def create_review(user_review: ReviewRequestModel):
+
+    if User.select().where(User.id == user_review.user_id).first() is None:
+        raise HTTPException(status_code = 404, detail='User not found')
+
+    if Movie.select().where(Movie.id == user_review.movie_id).first() is None:
+        raise HTTPException(status_code = 404, detail='Movie not found')
+
+    user_review = UserReview.create(
+        user_id = user_review.user_id,
+        movie_id = user_review.movie_id,
+        review = user_review.review,
+        score = user_review.score
+    )
+
+    return ReviewResponseModel(id = user_review.id, movie_id = user_review.movie_id, review = user_review.review, score = user_review.score)
