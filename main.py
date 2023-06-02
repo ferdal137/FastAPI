@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from database import database as connection
 
 #Start the server: uvicorn main:app
 
@@ -8,11 +9,17 @@ app = FastAPI(title = 'Project Movie Review',
 
 @app.on_event('startup')
 def startup():
-    print('The server is starting')
+    if connection.is_closed():
+        connection.connect()
+
+        print('Connecting...')
 
 @app.on_event('shutdown')
 def shutdown():
-    print("The server is ending")
+    if not connection.is_closed():
+        connection.close()
+
+        print('Close')
 
 @app.get('/')
 async def index():
