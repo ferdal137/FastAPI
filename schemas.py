@@ -35,12 +35,9 @@ class UserResponseModel(BaseModel):
          orm_mode = True
          getter_dict = PeeweGetterDict"""
 
-class ReviewRequestModel(BaseModel):
-    user_id: int
-    movie_id: int
-    review: str
-    score: int
 
+
+class Review_validator():
     @validator('score')
     def score_validator(cls, score):
         if score < 0 or score > 5:
@@ -48,8 +45,22 @@ class ReviewRequestModel(BaseModel):
 
         return score
 
+class ReviewRequestModel(BaseModel, Review_validator):
+    user_id: int
+    movie_id: int
+    review: str
+    score: int
+
+
+
 class ReviewResponseModel(BaseModel):
     id: int
     movie_id: int
     review: str
     score: int
+
+class ReviewRequestPutModel(BaseModel, Review_validator):
+    review: str
+    score: int
+
+
