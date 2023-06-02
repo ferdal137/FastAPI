@@ -35,7 +35,15 @@ class UserResponseModel(BaseModel):
          orm_mode = True
          getter_dict = PeeweGetterDict"""
 
+# ---------------- Movie --------------------
 
+"""class MovieResponseModel(BaseModel):
+    id: int
+    title: str"""
+
+
+
+# ---------------- Review --------------------
 
 class Review_validator():
     @validator('score')
@@ -51,11 +59,9 @@ class ReviewRequestModel(BaseModel, Review_validator):
     review: str
     score: int
 
-
-
 class ReviewResponseModel(BaseModel):
     id: int
-    movie_id: int
+    movie_id: int   #MovieResponseModel to relationed models
     review: str
     score: int
 

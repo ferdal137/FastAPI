@@ -1,4 +1,4 @@
-#!/home/fer_dalai/404/Back/FastAPI/Project/env/bin/python3
+#!/home/fer_dalai/404/Back/FastAPI/App/env/bin/python3
 
 import datetime
 import os
