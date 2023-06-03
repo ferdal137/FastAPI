@@ -4,3 +4,4 @@ pip modules
 - uvicorn
 - peewee
 - mysqlclient
+- requests
